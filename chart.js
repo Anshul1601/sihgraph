@@ -102,6 +102,20 @@ result = await resolveAfter2Seconds();
 console.log(arr1)
 console.log(arryes)
 console.log(arrno)
+var arrmonth=[];
+for(var j=1;j<=9;j++){
+  var k=0;
+  db.collection('user').where("currentmonth", "==", j).get().then((snapshot) => {
+    console.log(snapshot.docs.forEach(doc => {
+      k++;
+
+    }))
+  });
+  result = await resolveAfter2Seconds();
+  arrmonth[j] = k;
+}
+result = await resolveAfter2Seconds();
+console.log(arrmonth)
   new Chart(document.getElementById("bar-chart"), {
     type: 'bar',
     data: {
@@ -160,6 +174,25 @@ new Chart(document.getElementById("bar-chart-grouped"), {
     title: {
       display: true,
       text: 'Sanitation Measures'
+    }
+  }
+});
+new Chart(document.getElementById("line-chart"), {
+  type: 'line',
+  data: {
+    labels: [1,2,3,4,5,6,7,8,9],
+    datasets: [{ 
+        data: [arrmonth[1],arrmonth[2],arrmonth[3],arrmonth[4],arrmonth[5],arrmonth[6],arrmonth[7],arrmonth[8],arrmonth[9]],
+        label: "Months",
+        borderColor: "#3e95cd",
+        fill: false
+      }
+    ]
+  },
+  options: {
+    title: {
+      display: true,
+      text: 'No of pregnant women in each month'
     }
   }
 });
