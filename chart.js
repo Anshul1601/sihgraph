@@ -75,6 +75,33 @@ async function asyncCall() {
   }
 console.log(arr4)
 result = await resolveAfter2Seconds();
+var arryes=[];
+var arrno=[];
+for(var j=0;j<arr1.length;j++){
+  var kyes=0;
+  var kno=0;
+  db.collection('user').where("region", "==", arr1[j]).get().then((snapshot) => {
+    console.log(snapshot.docs.forEach(doc => {
+      // console.log(arr1[j] + "   heyy")
+      // k++
+      if(doc.data().toilet){
+        kyes++;
+      }else{
+        kno++;
+      }
+
+    }))
+  });
+  result = await resolveAfter2Seconds();
+  arryes[j] = kyes;
+  arrno[j]=kno;
+
+}
+result = await resolveAfter2Seconds();
+
+console.log(arr1)
+console.log(arryes)
+console.log(arrno)
   new Chart(document.getElementById("bar-chart"), {
     type: 'bar',
     data: {
@@ -82,7 +109,7 @@ result = await resolveAfter2Seconds();
       datasets: [
         {
           label: "No of pregnant women (millions)",
-          backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
+          backgroundColor: ["#3e90cd", "#8e5992", "#3cba9f", "#e8c3b9", "#c45850"],
           data: [arr2[0], arr2[1], arr2[2]]
         }
       ]
@@ -113,7 +140,29 @@ result = await resolveAfter2Seconds();
       }
     }
 });
-
+new Chart(document.getElementById("bar-chart-grouped"), {
+  type: 'bar',
+  data: {
+    labels: [arr1[0], arr1[1], arr1[2]],
+    datasets: [
+      {
+        label: "Access to proper sanitation",
+        backgroundColor: "#3e95cd",
+        data: [arryes[0],arryes[1],arryes[2]]
+      }, {
+        label: "No access to proper sanitation",
+        backgroundColor: "#8e5ea2",
+        data: [arrno[0],arrno[1],arrno[2]]
+      }
+    ]
+  },
+  options: {
+    title: {
+      display: true,
+      text: 'Sanitation Measures'
+    }
+  }
+});
 
 }
 
