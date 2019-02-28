@@ -29,15 +29,38 @@ async function asyncCall() {
   var len = arr.length;
   var arr1 = [];
   var arr3 = [];
+  var arrdisease=[];
   for (; i < len; i++) {
     arr1.push(arr[i].region)
     arr3.push(arr[i].phcno)
+    arrdisease.push(arr[i].disease)
   }
   arr1=arr1.filter( onlyUnique )
   arr3=arr3.filter(onlyUnique)
+  arrdisease=arrdisease.filter(onlyUnique)
   console.log(arr1)
   console.log(arr3)
+  console.log(arrdisease)
+
+  var diseasepatient=[];
+for(var j=0;j<arrdisease.length;j++){
+  var k=0;
+  console.log(arrdisease[j]);
+  db.collection('user').where("disease", "==", arrdisease[j]).get().then((snapshot) => {
+    console.log(snapshot.docs.forEach(doc => {
+     // console.log(arr3[j] + "   heyy")
+      k++
+
+    }))
+  });
   result = await resolveAfter2Seconds();
+  diseasepatient[j] = k;
+
+}
+console.log(diseasepatient)
+  result = await resolveAfter2Seconds();
+
+
   var arr2 = [];
   var x = 0;
   for (var j = 0; j < arr1.length; j++) {
@@ -116,6 +139,21 @@ for(var j=1;j<=9;j++){
 }
 result = await resolveAfter2Seconds();
 console.log(arrmonth)
+// var diseasepatient=[];
+// for(var j=0;j<arrdisease.length;j++){
+//   var k=0;
+//   console.log(arrdisease[j]);
+//   db.collection('user').where("disease", "==", arrdisease[j]).get().then((snapshot) => {
+//     console.log(snapshot.docs.forEach(doc => {
+//      // console.log(arr3[j] + "   heyy")
+//       k++
+
+//     }))
+//   });
+//   result = await resolveAfter2Seconds();
+//   diseasepatient[j] = k;
+
+// }
   new Chart(document.getElementById("bar-chart"), {
     type: 'bar',
     data: {
@@ -193,6 +231,26 @@ new Chart(document.getElementById("line-chart"), {
     title: {
       display: true,
       text: 'No of pregnant women in each month'
+    }
+  }
+});
+
+new Chart(document.getElementById("polar-chart"), {
+  type: 'polarArea',
+  data: {
+    labels: [arrdisease[0],arrdisease[1],arrdisease[2]],
+    datasets: [
+      {
+        label: "Population (millions)",
+        backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+        data: [diseasepatient[0],diseasepatient[1],diseasepatient[2]]
+      }
+    ]
+  },
+  options: {
+    title: {
+      display: true,
+      text: 'Diseases Faced By Women'
     }
   }
 });
